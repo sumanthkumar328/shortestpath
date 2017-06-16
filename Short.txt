@@ -1,0 +1,284 @@
+
+//This is a java program to find the shortest path between source vertex and destination vertex
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+public class Short {
+	public static void main(String... arg) {
+		int adjacency_matrix[][];
+		int number_of_rows;
+		int number_of_columns;
+		int source = 0, destination = 0;
+		boolean traversed = false;
+		Scanner scan = new Scanner(System.in);
+		try {
+			System.out.println("Enter the number of rows");
+			number_of_rows = scan.nextInt();
+
+			System.out.println("Enter the number of columns");
+			number_of_columns = scan.nextInt();
+
+			adjacency_matrix = new int[number_of_rows][number_of_columns];
+
+			System.out.println("Enter the Weighted Matrix for the graph");
+			for (int i = 0; i < number_of_rows; i++) {
+				for (int j = 0; j < number_of_columns; j++) {
+					adjacency_matrix[i][j] = scan.nextInt();
+				}
+			}
+			int row = 0;
+			int column = 0;
+			int current = 1000;
+			int total_cost = 0;
+			boolean finish = false;
+			int top = 1000;
+			int middle = 1000;
+			int bottom = 1000;
+			int temp_cost=0;
+			for (int i = 0; i < number_of_rows; i++) {
+				int current1 = adjacency_matrix[i][0];
+				if(current1!=0 && (current!=current1)){
+				if (current < current1) {
+
+				} else {
+					current = current1;
+					row=i;
+				}
+				}
+			}
+			
+			
+			if(current>50){
+				System.out.println("No" );
+				System.out.println("total_cost: 0" );
+				System.out.println("path: {}" );
+				System.exit(0);
+			}
+			
+			total_cost = total_cost + current;
+			if (number_of_columns == 1) {
+
+				System.out.println("total_cost:" + total_cost);
+				System.exit(0);
+			}
+			if (number_of_columns - 1 >= column + 1) {
+				middle = adjacency_matrix[row][column + 1];
+				// total_cost=total_cost+middle;
+			}
+			if (number_of_columns - 1 >= column + 1 && number_of_rows - 1 >= row + 1) {
+				bottom = adjacency_matrix[row + 1][column + 1];
+				// total_cost=total_cost+bottom;
+			}
+			List<Integer> path = new ArrayList<Integer>(100);
+			List<Integer> temp_path = new ArrayList<Integer>(101);
+			path.add(row + 1);
+
+			if (middle < bottom) {
+				current = middle;
+				column = column + 1;
+				path.add(row + 1);
+				
+				temp_cost=total_cost;
+				total_cost = total_cost + middle;
+				if(total_cost>=50){
+					List<Integer> number = IntStream.rangeClosed(1, number_of_rows)
+						    .boxed().collect(Collectors.toList());
+					//System.out.println("Path: "+path);
+					//temp_path = new ArrayList<Integer>(101);
+					 //Collections.copy(temp_path,path);
+					System.out.println("Path: "+path);
+						compareArrays(number,path);
+					
+					System.out.println("total_cost:" + temp_cost);
+					//System.out.println("Path: "+path);
+					System.exit(0);
+				}
+				
+			} else {
+				current = bottom;
+				column = column + 1;
+				row = row + 1;
+				path.add(row + 1);
+				temp_cost=total_cost;
+				total_cost = total_cost + bottom;
+				if(total_cost>=50){
+					List<Integer> number = IntStream.rangeClosed(1, number_of_rows)
+						    .boxed().collect(Collectors.toList());
+					//System.out.println("Path: "+path);
+					//temp_path = new ArrayList<Integer>(101);
+					// Collections.copy(temp_path,path);
+					System.out.println("Path: "+path);
+						compareArrays(number,path);
+					
+					System.out.println("total_cost:" + temp_cost);
+					//System.out.println("Path: "+path);
+					System.exit(0);
+				}
+			}
+
+			while (!finish) {
+
+				if (column + 1 >= number_of_columns) {
+					finish = true;
+					break;
+				}
+				/*
+				 * if (row + 1 == 1) { finish = true; break; }
+				 */
+				/*if (number_of_columns - 1 >= column + 1 && row - 2 >= 0 && column-1>=0) {
+					top = adjacency_matrix[row - 1][column + 1];
+					// total_cost=total_cost+top;
+				}else{
+					top=1000;
+				}*/
+
+				/*
+				 * top = adjacency_matrix[row - 1][column + 1]; middle =
+				 * adjacency_matrix[row][column + 1]; bottom =
+				 * adjacency_matrix[row + 1][column + 1];
+				 */
+
+				if (number_of_columns - 1 >= column + 1) {
+					middle = adjacency_matrix[row][column + 1];
+					// total_cost=total_cost+middle;
+				}else{
+					middle=1000;
+				}
+				
+				
+				if (number_of_columns - 1 >= column + 1 && number_of_rows - 1 >= row + 1) {
+					bottom = adjacency_matrix[row + 1][column + 1];
+					// total_cost=total_cost+bottom;
+				}else{
+					bottom=1000;
+				}
+
+					if (middle < bottom) {
+						System.out.println("A is the smallest");
+						current = middle;
+						temp_cost=total_cost;
+						total_cost = total_cost + middle;
+						
+						if(total_cost>=50){
+							List<Integer> number = IntStream.rangeClosed(1, number_of_rows)
+								    .boxed().collect(Collectors.toList());
+							//System.out.println("Path: "+path);
+							//temp_path = new ArrayList<Integer>(101);
+							// Collections.copy(temp_path,path);
+							System.out.println("Path: "+path);
+								compareArrays(number,path);							
+							System.out.println("total_cost:" + temp_cost);
+							//System.out.println("Path: "+path);
+							System.exit(0);
+						}
+						
+						
+						path.add(row+1);
+						column = column + 1;
+						//row = row + 1;
+					} else {
+						System.out.println("B is the smallest");
+						current = bottom;
+						temp_cost=total_cost;
+						total_cost = total_cost + bottom;
+						
+						
+						if(total_cost>=50){
+							List<Integer> number = IntStream.rangeClosed(1, number_of_rows)
+								    .boxed().collect(Collectors.toList());
+							System.out.println("Path: "+path);
+							//temp_path = new ArrayList<Integer>(101);
+							// Collections.copy(temp_path,path);
+								compareArrays(number,path);
+							
+							System.out.println("total_cost:" + temp_cost);
+							//System.out.println("Path: "+path);
+							System.exit(0);
+						}
+						
+						
+						path.add(row + 2);
+						column = column + 1;
+						row = row + 1;
+					}
+				
+				//path.add(row + 1);
+			}
+			
+			
+			/*for(int i=1;i<number_of_rows;i++){
+				path.get(i);
+			}*/
+			
+			List<Integer> number = IntStream.rangeClosed(1, number_of_rows)
+				    .boxed().collect(Collectors.toList());
+			
+			//temp_path = new ArrayList<Integer>(101	);
+			// Collections.copy(temp_path,path);
+			System.out.println("Path: "+path);
+			compareArrays(number,path);
+			
+			System.out.println("total_cost:" + total_cost);
+			//System.out.println("Path: "+path);
+
+
+			scan.close();
+		} catch (InputMismatchException inputMismatch) {
+			System.out.println("Invalid Matrix.");
+			main();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/*public static void compareArrays(List<Integer> list1,List<Integer> list2){
+		int length = list1.size();
+		int count=0;
+		Set<Integer> hs = new HashSet<>();
+		hs.addAll(list2);
+		list2.clear();
+		list2.addAll(hs);
+			for(Integer b : list2){
+				for(Integer a: list1){
+				if(a==b){
+					count=count+1;
+				}
+				}
+			}
+		System.out.println(count);
+		if(length==count){
+			System.out.println("Traversed through all rows: Yes");
+		} else { 
+			System.out.println("Traversed through all rows: No");
+		}
+	}*/
+	
+	public static void compareArrays(List<Integer> a, List<Integer> b){     
+	    // Check for sizes and nulls
+		
+	    Set<Integer> hs = new HashSet<>();
+		hs.addAll(b);
+		b.clear();
+		b.addAll(hs);
+		
+	    if ((a.size() != b.size()) || (a == null && b!= null) || (a != null && b== null)){
+	    	System.out.println("No");
+	    	return;
+	    }
+
+	    if (a == null && b == null){
+	    	System.out.println("Yes");
+	    	return;
+	    }
+
+	    // Sort and compare the two lists          
+	    Collections.sort(a);
+	    Collections.sort(b);      
+	    if(a.equals(b)){
+	    	System.out.println("Yes");
+	    	}else{
+	    		System.out.println("No");
+	    	}
+	}
+	
+}
